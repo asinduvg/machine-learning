@@ -18,13 +18,11 @@ for iter = 1:num_iters
     %
 
 
-
-
-
-
-
-
-
+  thetaPre = theta;
+  
+  for idx = 1: size(X, 2)
+      theta(idx) = thetaPre(idx) - alpha * sum(((X * thetaPre) - y) .* X(:, idx)) / m;
+  end
 
 
     % ============================================================
