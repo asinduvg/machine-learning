@@ -83,20 +83,46 @@ function [J grad] = nnCostFunction(nn_params, ...
     %         Hint: We recommend implementing backpropagation using a for-loop
     %               over the training examples if you are implementing it for the
     %               first time.
-    %
-    % Part 3: Implement regularization with the cost function and gradients.
-    %
-    %         Hint: You can implement this around the code for
-    %               backpropagation. That is, you can compute the gradients for
-    %               the regularization separately and then add them to Theta1_grad
-    %               and Theta2_grad from Part 2.
-    %
 
-    % -------------------------------------------------------------
+    for t = 1:m
 
-    % =========================================================================
+        a1 = X(t, :)';
+        z2 = Theta1 * a1;
+        a2 = sigmoid(z2);
+        a2 = [1; a2];
+        z3 = Theta2 * a2;
+        a3 = sigmoid(z3);
 
-    % Unroll gradients
-    grad = [Theta1_grad(:); Theta2_grad(:)];
+        delta3 = a3 - y_vec(t, :)';
 
-end
+        delta2 = (Theta2' * delta3) .* [1; sigmoidGradient(z2)];
+        delta2 = delta2(2:end);
+
+        Theta1_grad = Theta1_grad + (delta2 * a1');
+        Theta2_grad = Theta2_grad + (delta3 * a2');
+
+        endfor;
+
+        % Part 3: Implement regularization with the cost function and gradients.
+        %
+        %         Hint: You can implement this around the code for
+        %               backpropagation. That is, you can compute the gradients for
+        %               the regularization separately and then add them to Theta1_grad
+        %               and Theta2_grad from Part 2.
+        %
+
+        % -------------------------------------------------------------
+
+        % =========================================================================
+
+        Theta1_grad = (1 / m) * Theta1_grad;
+        Theta2_grad = (1 / m) * Theta2_grad;
+
+        % reguralizing
+        Theta1_grad(:, 2:end) = Theta1_grad(:, 2:end) + (lambda / m) .* Theta1(:, 2:end);
+        Theta2_grad(:, 2:end) = Theta2_grad(:, 2:end) + (lambda / m) .* Theta2(:, 2:end);
+
+        % Unroll gradients
+        grad = [Theta1_grad(:); Theta2_grad(:)];
+
+    end
