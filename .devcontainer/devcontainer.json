@@ -1,0 +1,10 @@
+{
+    "name": "Octave Codespace",
+    "dockerFile": "Dockerfile",
+    "extensions": [
+        "ms-vscode.cpptools",
+        "toasty-technologies.octave",
+        "ms-azuretools.vscode-docker"
+    ],
+    "postCreateCommand":"git config --global user.name 'Asindu Vidanagamachchi' && git config --global user.email 'ashvg.dev@gmail.com'"
+}
